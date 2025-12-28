@@ -1,0 +1,32 @@
+# auth-service/auth-service.yml
+server:
+  port: 8081
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/banking_auth
+      auto-index-creation: true
+    redis:
+      host: localhost
+      port: 6379
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  level:
+    com.nttd.banking.auth: DEBUG
+
+# JWT Configuration (usar variables de entorno en producción)
+jwt:
+  secret: ${JWT_SECRET:changeme-secret-key-for-development-only}
+  expiration: 86400000  # 24 horas

@@ -1,0 +1,39 @@
+# debit-card-service/debit-card-service.yml
+server:
+  port: 8086
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/banking_debit_cards
+      auto-index-creation: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: debit-card-service-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+resilience4j:
+  timelimiter:
+    instances:
+      debitCardService:
+        timeout-duration: 2s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  level:
+    com.nttd.banking.debitcard: DEBUG
