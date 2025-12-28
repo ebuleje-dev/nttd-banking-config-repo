@@ -3,44 +3,51 @@ server:
   port: 8082
 
 spring:
+  application:
+    name: customer-service
   data:
     mongodb:
       uri: mongodb://localhost:27017/banking_customers
       auto-index-creation: true
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
 
-  kafka:
-    bootstrap-servers: localhost:9092
-    consumer:
-      group-id: customer-service-group
-      auto-offset-reset: earliest
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    consumer:
+#      group-id: customer-service-group
+#      auto-offset-reset: earliest
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-  instance:
-    prefer-ip-address: true
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#  instance:
+#    prefer-ip-address: true
 
-resilience4j:
-  circuitbreaker:
-    instances:
-      customerService:
-        failure-rate-threshold: 50
-        wait-duration-in-open-state: 10000
-  timelimiter:
-    instances:
-      customerService:
-        timeout-duration: 2s
+#resilience4j:
+#  circuitbreaker:
+#    instances:
+#      customerService:
+#        failure-rate-threshold: 50
+#        wait-duration-in-open-state: 10000
+#  timelimiter:
+#    instances:
+#      customerService:
+#        timeout-duration: 2s
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
 
-logging:
-  level:
-    com.nttd.banking.customer: DEBUG
+#logging:
+#  level:
+#    com.nttd.banking.customer: DEBUG
