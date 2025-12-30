@@ -7,7 +7,7 @@ spring:
     name: customer-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/banking_customers
+      uri: mongodb://host.docker.internal:27017/banking_customers
       auto-index-creation: true
 springdoc:
   api-docs:
@@ -28,7 +28,7 @@ springdoc:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
