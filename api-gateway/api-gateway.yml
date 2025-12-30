@@ -15,6 +15,7 @@ spring:
           predicates:
             - Path=/api/customers/**
           filters:
+            - RewritePath=/api/customers/(?<segment>.*), /customers/${segment}
             - name: CircuitBreaker
               args:
                 name: customerCircuitBreaker
