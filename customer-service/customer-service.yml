@@ -24,12 +24,16 @@ springdoc:
 #      key-serializer: org.apache.kafka.common.serialization.StringSerializer
 #      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka/
-#  instance:
-#    prefer-ip-address: true
+# Eureka Client
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 30
 
 #resilience4j:
 #  circuitbreaker:
