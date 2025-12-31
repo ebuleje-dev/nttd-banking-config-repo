@@ -5,7 +5,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/banking_credit_cards
+      uri: mongodb://host.docker.internal:27017/banking_credit_cards
       auto-index-creation: true
 
   kafka:
@@ -20,7 +20,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
 
 resilience4j:
   timelimiter:
