@@ -21,7 +21,6 @@ spring:
           predicates:
             - Path=/api/v1/customers/**
           filters:
-            - StripPrefix=2
             - name: CircuitBreaker
               args:
                 name: customerCircuitBreaker
@@ -35,7 +34,6 @@ spring:
           predicates:
             - Path=/api/v1/accounts/**
           filters:
-            - StripPrefix=2
             - name: CircuitBreaker
               args:
                 name: accountCircuitBreaker
@@ -49,7 +47,6 @@ spring:
           predicates:
             - Path=/api/v1/credits/**
           filters:
-            - StripPrefix=2
             - name: CircuitBreaker
               args:
                 name: creditCircuitBreaker
@@ -63,7 +60,6 @@ spring:
           predicates:
             - Path=/api/v1/credit-cards/**
           filters:
-            - StripPrefix=2
             - name: CircuitBreaker
               args:
                 name: creditCardCircuitBreaker
@@ -77,7 +73,6 @@ spring:
           predicates:
             - Path=/api/v1/debit-cards/**
           filters:
-            - StripPrefix=2
             - name: CircuitBreaker
               args:
                 name: debitCardCircuitBreaker
@@ -91,7 +86,6 @@ spring:
           predicates:
             - Path=/api/v1/transactions/**
           filters:
-            - StripPrefix=2
             - name: CircuitBreaker
               args:
                 name: transactionCircuitBreaker
@@ -105,7 +99,6 @@ spring:
           predicates:
             - Path=/api/v1/reports/**
           filters:
-            - StripPrefix=2
             - name: CircuitBreaker
               args:
                 name: reportCircuitBreaker
@@ -119,7 +112,6 @@ spring:
           predicates:
             - Path=/api/v1/yanki/**
           filters:
-            - StripPrefix=2
             - name: CircuitBreaker
               args:
                 name: yankiCircuitBreaker
@@ -133,7 +125,6 @@ spring:
           predicates:
             - Path=/api/v1/bootcoin/**
           filters:
-            - StripPrefix=2
             - name: CircuitBreaker
               args:
                 name: bootcoinCircuitBreaker
