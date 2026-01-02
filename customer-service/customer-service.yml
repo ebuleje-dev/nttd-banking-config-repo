@@ -66,7 +66,8 @@ eureka:
   instance:
     prefer-ip-address: true
     lease-renewal-interval-in-seconds: 30
-    instance-id: ${spring.application.name}:${random.value}
+    #instance-id: ${spring.application.name}:${random.value}
+    instance-id: ${spring.application.name}:${server.port}
 
 # Resilience4j Configuration
 resilience4j:
