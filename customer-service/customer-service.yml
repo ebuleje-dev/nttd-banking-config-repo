@@ -46,6 +46,14 @@ spring:
       properties:
         spring.json.add.type.headers: false
 
+# Credit Card Validation Mock Configuration
+# Set to false when real credit-card-service is available
+credit-card:
+  validation:
+    mock:
+      enabled: true
+      always-approve: true
+
 # SpringDoc OpenAPI Configuration
 springdoc:
   api-docs:
