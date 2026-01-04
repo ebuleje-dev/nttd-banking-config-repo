@@ -30,20 +30,20 @@ spring:
           min-idle: 0
 
   # Kafka Configuration
-  #kafka:
-    #bootstrap-servers: localhost:9092
-    #consumer:
-      #group-id: customer-service-group
-      #auto-offset-reset: earliest
-      #key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      #value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      #properties:
-        #spring.json.trusted.packages: "*"
-    #producer:
-      #key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      #value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      #properties:
-        #spring.json.add.type.headers: false
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: customer-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
 
 # SpringDoc OpenAPI Configuration
 springdoc:
