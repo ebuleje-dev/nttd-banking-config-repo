@@ -7,7 +7,6 @@ spring:
     mongodb:
       #uri: mongodb://host.docker.internal:27017/banking_auth
       uri: mongodb://localhost:27017/auth_db
-      database: auth_db
       auto-index-creation: true
     redis:
       host: localhost
@@ -61,8 +60,9 @@ logging:
   #secret: ${JWT_SECRET:changeme-secret-key-for-development-only}
   #expiration: 86400000  # 24 horas
 
-# JWT configuration
-jwt:
-  private-key: classpath:keys/private-key.pem
-  access-token-expiration: 86400000      # 24 horas
-  refresh-token-expiration: 604800000    # 7 días
+ # Configuración JWT con claves RSA
+  jwt:
+    private-key: classpath:keys/private-key.pem
+    public-key: classpath:keys/public-key.pem
+    access-token-expiration: 86400000      # 24 horas en ms
+    refresh-token-expiration: 604800000    # 7 días en ms
