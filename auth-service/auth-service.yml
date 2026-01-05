@@ -61,8 +61,8 @@ logging:
   #expiration: 86400000  # 24 horas
 
  # Configuración JWT con claves RSA
-  jwt:
-    private-key: classpath:keys/private-key.pem
-    public-key: classpath:keys/public-key.pem
-    access-token-expiration: 86400000      # 24 horas en ms
-    refresh-token-expiration: 604800000    # 7 días en ms
+jwt:
+  private-key: classpath:keys/private-key.pem
+  public-key: classpath:keys/public-key.pem
+  access-token-expiration: 86400000      # 24 horas en ms
+  refresh-token-expiration: 604800000    # 7 días en ms
