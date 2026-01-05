@@ -51,8 +51,9 @@ spring:
 credit-card:
   validation:
     mock:
-      enabled: true
+      enabled: false
       always-approve: true
+      
 # Customer Products Mock Configuration
 customer-products:
   mock:
