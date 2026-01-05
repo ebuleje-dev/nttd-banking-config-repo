@@ -53,6 +53,11 @@ credit-card:
     mock:
       enabled: true
       always-approve: true
+# Customer Products Mock Configuration
+customer-products:
+  mock:
+    enabled: true      # true = use mock, false = use microservice
+    generate-data: true # true = generate random data, false = return empty
 
 # SpringDoc OpenAPI Configuration
 springdoc:
