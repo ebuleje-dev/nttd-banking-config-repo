@@ -52,7 +52,7 @@ credit-card:
   validation:
     mock:
       enabled: false
-      always-approve: true
+      always-approve: false
       
 # Customer Products Mock Configuration
 customer-products:
