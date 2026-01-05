@@ -102,22 +102,41 @@ resilience4j:
         wait-duration-in-open-state: 10s
         permitted-number-of-calls-in-half-open-state: 5
         register-health-indicator: true
+        slow-call-duration-threshold: 5s
+        slow-call-rate-threshold: 80
+        automatic-transition-from-open-to-half-open-enabled: true
+      customerProducts:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 5
+        register-health-indicator: true
+        slow-call-duration-threshold: 5s
+        slow-call-rate-threshold: 80
+        automatic-transition-from-open-to-half-open-enabled: true
   timelimiter:
     instances:
       customerService:
-        timeout-duration: 2s
+        timeout-duration: 30s
+        cancel-running-future: true
       creditCardValidation:
-        timeout-duration: 3s
+        timeout-duration: 30s
+        cancel-running-future: true
+      customerProducts:
+        timeout-duration: 30s
+        cancel-running-future: true
 
 # Actuator Configuration
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: health,info,metrics,circuitbreakers,circuitbreakerevents
+      base-path: /actuator
   endpoint:
     health:
       show-details: always
+      show-components: always
   health:
     circuitbreakers:
       enabled: true
@@ -127,10 +146,10 @@ logging:
   level:
     root: INFO
     com.nttd.banking.customer: DEBUG
-    org.springframework.data.mongodb: DEBUG
-    org.springframework.data.redis: DEBUG
-    org.springframework.kafka: INFO
     io.github.resilience4j: DEBUG
+    org.springframework.data.mongodb: INFO
+    org.springframework.data.redis: INFO
+    org.springframework.kafka: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     #file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
