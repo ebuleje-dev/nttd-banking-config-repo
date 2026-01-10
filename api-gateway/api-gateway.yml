@@ -211,11 +211,14 @@ authorization:
 eureka:
   client:
     service-url:
+      # defaultZone: http://eureka-server:8761/eureka/
       defaultZone: http://localhost:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
-    prefer-ip-address: true
+    # Para Docker: true
+    # Para local: false
+    prefer-ip-address: false
     hostname: api-gateway
     instance-id: ${spring.application.name}:${server.port}
 

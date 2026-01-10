@@ -85,7 +85,10 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
   instance:
-    prefer-ip-address: true
+    # Docker: true
+    # local: false
+    prefer-ip-address: false
+    hostname: customer-service
     lease-renewal-interval-in-seconds: 30
     #instance-id: ${spring.application.name}:${random.value}
     instance-id: ${spring.application.name}:${server.port}
