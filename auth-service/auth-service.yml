@@ -44,7 +44,7 @@ eureka:
     # Docker: true
     # local: false
     prefer-ip-address: false
-    hostname: auth-service
+    hostname: localhost #auth-service
     lease-renewal-interval-in-seconds: 30
     instance-id: ${spring.application.name}:${server.port}
 

@@ -219,7 +219,7 @@ eureka:
     # Para Docker: true
     # Para local: false
     prefer-ip-address: false
-    hostname: api-gateway
+    hostname: localhost #api-gateway
     instance-id: ${spring.application.name}:${server.port}
 
 # =========================
