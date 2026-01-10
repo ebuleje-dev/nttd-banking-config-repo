@@ -45,6 +45,9 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.add.type.headers: false
+        max.block.ms: 5000
+        request.timeout.ms: 5000
+        delivery.timeout.ms: 10000
 
 # Credit Card Validation Mock Configuration
 # Set to false when real credit-card-service is available
@@ -92,41 +95,46 @@ resilience4j:
   circuitbreaker:
     instances:
       customerService:
+        base-config: default
         sliding-window-size: 5
         failure-rate-threshold: 50
-        wait-duration-in-open-state: 5s
+        wait-duration-in-open-state: 30s
         permitted-number-of-calls-in-half-open-state: 2
         register-health-indicator: true
       creditCardValidation:
+        base-config: default
         sliding-window-size: 5
         minimum-number-of-calls: 3
         failure-rate-threshold: 50
         slow-call-rate-threshold: 80
-        slow-call-duration-threshold: 2s
-        wait-duration-in-open-state: 5s
-        permitted-number-of-calls-in-half-open-state: 2
+        slow-call-duration-threshold: 3s
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 1
         automatic-transition-from-open-to-half-open-enabled: true
         register-health-indicator: true
         sliding-window-type: COUNT_BASED
       customerProducts:
-        sliding-window-size: 10
+        base-config: default
+        sliding-window-size: 5
+        minimum-number-of-calls: 3
         failure-rate-threshold: 50
-        wait-duration-in-open-state: 5s
-        permitted-number-of-calls-in-half-open-state: 2
-        register-health-indicator: true
-        slow-call-duration-threshold: 2s
         slow-call-rate-threshold: 80
+        slow-call-duration-threshold: 3s
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 1
         automatic-transition-from-open-to-half-open-enabled: true
+        register-health-indicator: true
+        sliding-window-type: COUNT_BASED
   timelimiter:
     instances:
       customerService:
-        timeout-duration: 30s
+        timeout-duration: 5s
         cancel-running-future: true
       creditCardValidation:
-        timeout-duration: 30s
+        timeout-duration: 5s
         cancel-running-future: true
       customerProducts:
-        timeout-duration: 30s
+        timeout-duration: 5s
         cancel-running-future: true
 
 # Actuator Configuration
