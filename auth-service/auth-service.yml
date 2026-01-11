@@ -56,6 +56,19 @@ management:
   endpoint:
     health:
       show-details: always
+  info:
+    env:
+      enabled: true
+
+info:
+    app:
+      name: ${spring.application.name}
+      description: Auth Service - Banking Authentication Service
+      version: 0.0.1-SNAPSHOT
+      port: ${server.port}
+    company:
+      name: NTT Data Banking
+      project: Bootcamp Final Project
 
 logging:
   level:

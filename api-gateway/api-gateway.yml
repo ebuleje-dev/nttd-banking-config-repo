@@ -306,3 +306,16 @@ management:
       show-details: always
     gateway:
       enabled: true
+  info:
+    env:
+      enabled: true
+
+info:
+    app:
+      name: ${spring.application.name}
+      description: Api Gateway - Banking Gateway Service
+      version: 0.0.1-SNAPSHOT
+      port: ${server.port}
+    company:
+      name: NTT Data Banking
+      project: Bootcamp Final Project
