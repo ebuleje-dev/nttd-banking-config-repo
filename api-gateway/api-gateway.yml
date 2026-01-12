@@ -7,7 +7,8 @@ spring:
     
   data:
     redis:
-      host: localhost
+      host: host.docker.internal
+      #host: localhost
       port: 6379
       timeout: 2000ms
       lettuce:
@@ -163,7 +164,6 @@ security:
     jwks-uri: lb://auth-service/api/auth/.well-known/jwks.json
     cache-duration: 300
   public-paths:
-    # Usar rutas DESPUÉS del rewrite
     - /api/auth/login
     - /api/auth/register
     - /api/auth/refresh
@@ -223,15 +223,15 @@ authorization:
 eureka:
   client:
     service-url:
-      # defaultZone: http://eureka-server:8761/eureka/
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     # Para Docker: true
     # Para local: false
-    prefer-ip-address: false
-    hostname: localhost #api-gateway
+    prefer-ip-address: true
+    hostname: api-gateway #localhost
     instance-id: ${spring.application.name}:${server.port}
 
 # =========================
@@ -319,3 +319,20 @@ info:
     company:
       name: NTT Data Banking
       project: Bootcamp Final Project
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.nttd.banking.customer: DEBUG
+    io.github.resilience4j: DEBUG
+    org.springframework.data.mongodb: INFO
+    org.springframework.data.redis: INFO
+    org.springframework.kafka: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/api-gateway.log
+    max-size: 10MB
+    max-history: 30

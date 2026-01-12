@@ -5,11 +5,12 @@ server:
 spring:
   data:
     mongodb:
-      #uri: mongodb://host.docker.internal:27017/banking_auth
-      uri: mongodb://localhost:27017/auth_db
+      uri: mongodb://host.docker.internal:27017/banking_auth
+      #uri: mongodb://localhost:27017/auth_db
       auto-index-creation: true
     redis:
-      host: localhost
+      host: host.docker.internal
+      #host: localhost
       port: 6379
       timeout: 2000ms
       lettuce:
@@ -21,7 +22,8 @@ spring:
   kafka:
       #bootstrap-servers: localhost:9092
       #bootstrap-servers:  kafka:9092
-      bootstrap-servers: localhost:29092
+      #bootstrap-servers: localhost:29092
+      bootstrap-servers: host.docker.internal:29092
       consumer:
         group-id: auth-service-group
         auto-offset-reset: earliest
@@ -36,15 +38,15 @@ spring:
 eureka:
   client:
     service-url:
-      #defaultZone: http://eureka-server:8761/eureka/
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
       register-with-eureka: true
       fetch-registry: true
   instance:
     # Docker: true
     # local: false
-    prefer-ip-address: false
-    hostname: localhost #auth-service
+    prefer-ip-address: true
+    hostname: auth-service #localhost
     lease-renewal-interval-in-seconds: 30
     instance-id: ${spring.application.name}:${server.port}
 
@@ -74,6 +76,13 @@ logging:
   level:
     com.nttd.banking.auth: DEBUG
     org.springframework: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/auth-service.log
+    max-size: 10MB
+    max-history: 30
 
 # JWT Configuration (environment variables)
 #jwt:
