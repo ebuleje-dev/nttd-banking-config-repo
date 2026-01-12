@@ -1,39 +1,179 @@
-# credit-card-service/credit-card-service.yml
+# ====================================================================
+# credit-card-service.yml
+# ====================================================================
+
 server:
   port: 8085
+  forward-headers-strategy: framework
 
 spring:
+  application:
+    name: credit-card-service
+
+  # MongoDB Configuration
   data:
     mongodb:
-      uri: mongodb://host.docker.internal:27017/banking_credit_cards
+      #uri: mongodb://host.docker.internal:27017/banking_credit_cards
+      uri: mongodb://localhost:27017/banking_credit_cards
       auto-index-creation: true
 
+    # Redis Configuration (Caché) - Se usará en Etapa 2
+    redis:
+      #host: host.docker.internal
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+  # Kafka Configuration - Se usará en Etapa 2
   kafka:
-    bootstrap-servers: localhost:9092
+    #bootstrap-servers: kafka:9092
+    bootstrap-servers: localhost:29092
     consumer:
       group-id: credit-card-service-group
       auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+        max.block.ms: 5000
+        request.timeout.ms: 5000
+        delivery.timeout.ms: 10000
 
+# Customer Validation Mock Configuration
+# Set to false when real customer-service is available via Kafka (Etapa 2)
+customer:
+  validation:
+    mock:
+      enabled: true
+      always-approve: true
+
+# Report Service Overdue Debt Mock Configuration
+# Set to false when real report-service is available via Kafka (Etapa 2)
+overdue:
+  validation:
+    mock:
+      enabled: true
+      always-approve: true
+
+# SpringDoc OpenAPI Configuration
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    try-it-out-enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+  show-actuator: false
+
+# Eureka Client Configuration
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-server:8761/eureka/
+      #defaultZone: http://eureka-server:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    # Docker: true
+    # local: false
+    prefer-ip-address: false
+    hostname: localhost #credit-card-service
+    lease-renewal-interval-in-seconds: 30
+    #instance-id: ${spring.application.name}:${random.value}
+    instance-id: ${spring.application.name}:${server.port}
 
+# Resilience4j Configuration
 resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 2
+        register-health-indicator: true
+        record-exceptions:
+          - java.util.concurrent.TimeoutException
+          - java.lang.RuntimeException
+          - java.io.IOException
+    instances:
+      creditCardService:
+        base-config: default
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 2
+        register-health-indicator: true
+      customerValidation:
+        base-config: default
+        sliding-window-size: 5
+        minimum-number-of-calls: 3
+        failure-rate-threshold: 50
+        slow-call-rate-threshold: 80
+        slow-call-duration-threshold: 3s
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 1
+        automatic-transition-from-open-to-half-open-enabled: true
+        register-health-indicator: true
+        sliding-window-type: COUNT_BASED
+      overdueValidation:
+        base-config: default
+        sliding-window-size: 5
+        minimum-number-of-calls: 3
+        failure-rate-threshold: 50
+        slow-call-rate-threshold: 80
+        slow-call-duration-threshold: 3s
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 1
+        automatic-transition-from-open-to-half-open-enabled: true
+        register-health-indicator: true
+        sliding-window-type: COUNT_BASED
   timelimiter:
     instances:
       creditCardService:
-        timeout-duration: 2s
+        timeout-duration: 5s
+        cancel-running-future: true
+      customerValidation:
+        timeout-duration: 5s
+        cancel-running-future: true
+      overdueValidation:
+        timeout-duration: 5s
+        cancel-running-future: true
 
+# Actuator Configuration
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: health,info,metrics,circuitbreakers,circuitbreakerevents
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+  info:
+    env:
+      enabled: true
+  health:
+    circuitbreakers:
+      enabled: true
 
-logging:
-  level:
-    com.nttd.banking.creditcard: DEBUG
+# Info
+info:
+  app:
+    name: ${spring.application.name}
+    description: Credit Card Service - Banking Credit Card Management
+    version: 0.0.1-SNAPSHOT
