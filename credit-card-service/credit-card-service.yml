@@ -1,5 +1,6 @@
 # ====================================================================
 # credit-card-service.yml
+# Configuration file for Config Server
 # ====================================================================
 
 server:
@@ -17,7 +18,7 @@ spring:
       uri: mongodb://localhost:27017/banking_credit_cards
       auto-index-creation: true
 
-    # Redis Configuration (Caché) - Se usará en Etapa 2
+    # Redis Configuration
     redis:
       #host: host.docker.internal
       host: localhost
@@ -29,7 +30,7 @@ spring:
           max-idle: 8
           min-idle: 0
 
-  # Kafka Configuration - Se usará en Etapa 2
+  # Kafka Configuration
   kafka:
     #bootstrap-servers: kafka:9092
     bootstrap-servers: localhost:29092
@@ -49,8 +50,35 @@ spring:
         request.timeout.ms: 5000
         delivery.timeout.ms: 10000
 
+# Kafka Topics and Mocks Configuration
+kafka:
+  enabled: true
+  mocks:
+    enabled: true  # Set to false when other services are ready
+  topics:
+    # Topics that this service PRODUCES
+    credit-card-created: credit-card.card.created
+    charge-applied: credit-card.charge.applied
+    payment-received: credit-card.payment.received
+    overdue-detected: credit-card.overdue.detected
+
+    # Topics that this service CONSUMES
+    customer-created: customer.customer.created
+
+    # Request-Reply Topics (CRITICAL for VIP/PYME validation)
+    validation-request: credit-card-validation-request
+    validation-response: credit-card-validation-response
+
+    # Balance and Payment Topics
+    balance-request: credit-card.balance.request
+    balance-response: credit-card.balance.response
+    payment-command: credit-card.payment.command
+
+    # Overdue Check Topics
+    overdue-check-request: credit-card.overdue.check
+    overdue-check-response: credit-card.overdue.check.response
+
 # Customer Validation Mock Configuration
-# Set to false when real customer-service is available via Kafka (Etapa 2)
 customer:
   validation:
     mock:
@@ -58,7 +86,6 @@ customer:
       always-approve: true
 
 # Report Service Overdue Debt Mock Configuration
-# Set to false when real report-service is available via Kafka (Etapa 2)
 overdue:
   validation:
     mock:
@@ -87,8 +114,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
   instance:
-    # Docker: true
-    # local: false
+    # Docker: true, local: false
     prefer-ip-address: false
     hostname: host.docker.internal #credit-card-service
     lease-renewal-interval-in-seconds: 30
@@ -171,9 +197,19 @@ management:
     circuitbreakers:
       enabled: true
 
+# Logging Configuration
+logging:
+  level:
+    com.nttd.banking.creditcard: DEBUG
+    org.springframework.data.mongodb: INFO
+    org.springframework.data.redis: DEBUG
+    reactor.kafka: INFO
+    org.apache.kafka: WARN
+
 # Info
 info:
   app:
     name: ${spring.application.name}
-    description: Credit Card Service - Banking Credit Card Management
-    version: 0.0.1-SNAPSHOT
+    description: Credit Card Service - Manages personal and business credit cards
+    version: 1.0.0-SNAPSHOT
+    stage: Etapa 2 - Kafka + Redis Integration
